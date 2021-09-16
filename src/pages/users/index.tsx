@@ -1,9 +1,14 @@
-import { Button, Icon, Box, Flex, Heading, Table, Tr, Th, Checkbox, Tbody, Td, Text } from "@chakra-ui/react";
-import React from "react";
+import { Button, Icon, Box, Flex, Heading, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Text, useBreakpointValue } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
+
 import { Sidebar, Pagination, Header } from "../../components";
 
 export default function UserList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true
+  })
+
   return (
     <Box>
       <Header />
@@ -26,17 +31,19 @@ export default function UserList() {
           </Flex>
 
           <Table colorScheme="witeAlpha">
-            <Tr>
-              <Th>
-                <Checkbox colorScheme="pink" />
-              </Th>
-              <Th>Usuários</Th>
-              <Th>Data de cadastro</Th>
-              <Th width="8">Ações</Th>
-            </Tr>
+            <Thead>
+              <Tr>
+                <Th px={['4', '4', '6']} color="gray.300" width="8">
+                  <Checkbox colorScheme="pink" />
+                </Th>
+                <Th>Usuários</Th>
+                {isWideVersion && <Th>Data de cadastro</Th>}
+                <Th width="8">Ações</Th>
+              </Tr>
+            </Thead>
             <Tbody>
               <Tr>
-                <Td px="6">
+                <Td px={['4', '4', '6']}>
                   <Checkbox colorScheme="pink" />
                 </Td>
                 <Td>
@@ -45,7 +52,7 @@ export default function UserList() {
                     <Text fontWeight="sm" color="gray.300">email@email.com</Text>
                   </Box>
                 </Td>
-                <Td>04 de Abril, 2021</Td>
+                {isWideVersion && <Td>04 de Abril, 2021</Td>}
                 <Td>
                   <Button
                     as="a"
