@@ -11,7 +11,16 @@ export default function UserList() {
     const response = await fetch('http://localhost:3000/api/users')
     const data = await response.json()
 
-    return data
+    const users = data.users.map(({ id, name, email, createdAt }) => {
+      return {
+        id, name, email, createdAt: new Date(createdAt).toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        })
+      }
+    })
+    return users
   })
 
   const isWideVersion = useBreakpointValue({
@@ -64,29 +73,37 @@ export default function UserList() {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
-                  <Td px={['4', '4', '6']}>
-                    <Checkbox colorScheme="pink" />
-                  </Td>
-                  <Td>
-                    <Box>
-                      <Text fontWeight="bold">Carlos Oliveira</Text>
-                      <Text fontWeight="sm" color="gray.300">email@email.com</Text>
-                    </Box>
-                  </Td>
-                  {isWideVersion && <Td>04 de Abril, 2021</Td>}
-                  <Td>
-                    <Button
-                      as="a"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="purple"
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                    >
-                      Editar
-                    </Button>
-                  </Td>
-                </Tr>
+                {
+                  data.map(({ id, name, email, createdAt }) => {
+                    return (
+                      <Tr key={id}>
+                        <Td px={['4', '4', '6']}>
+                          <Checkbox colorScheme="pink" />
+                        </Td>
+                        <Td>
+                          <Box>
+                            <Text fontWeight="bold">{name}</Text>
+                            <Text fontWeight="sm" color="gray.300">{email}</Text>
+                          </Box>
+                        </Td>
+                        {isWideVersion && <Td>{createdAt}</Td>}
+                        <Td>
+                          <Button
+                            as="a"
+                            size="sm"
+                            fontSize="sm"
+                            colorScheme="purple"
+                            leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                          >
+                            Editar
+                          </Button>
+                        </Td>
+                      </Tr>
+                    )
+                  })
+                }
+
+
               </Tbody>
             </Table>
             <Pagination />
