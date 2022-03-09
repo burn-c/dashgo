@@ -30,8 +30,9 @@ export default function PaginationItem({ number, isCurrent = false }: Pagination
       fontSize="xs"
       width="4"
       colorScheme="gray.700"
+      bg="gray.500"
       _hover={{
-        bg: 'gray.500'
+        bg: 'gray.300'
       }}
     >
       {number}
