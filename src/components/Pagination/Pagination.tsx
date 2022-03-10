@@ -53,7 +53,7 @@ export function Pagination({
       <Stack direction="row" spacing="2">
         {currentPage > (1 + SIBLINGS_COUNT_PAGE) && (
           <>
-            <PaginationItem number={1} />
+            <PaginationItem onPageChange={onPageChange} number={1} />
             {currentPage > (2 + SIBLINGS_COUNT_PAGE) &&
               <Text color="gray.300" width={8} textAlign="center">...</Text>}
           </>
@@ -61,20 +61,20 @@ export function Pagination({
         }
 
         {previousPages.length > 0 && previousPages.map(page =>
-          <PaginationItem key={`pagination-previous-${page}`} number={page} />
+          <PaginationItem onPageChange={onPageChange} key={`pagination-previous-${page}`} number={page} />
         )}
 
-        <PaginationItem number={currentPage} isCurrent />
+        <PaginationItem onPageChange={onPageChange} number={currentPage} isCurrent />
 
         {nextPages.length > 0 && nextPages.map(page =>
-          <PaginationItem key={`pagination-next-${page}`} number={page} />
+          <PaginationItem onPageChange={onPageChange} key={`pagination-next-${page}`} number={page} />
         )}
 
         {(currentPage + SIBLINGS_COUNT_PAGE) < lastPage && (
           <>
             {(currentPage + 1 + SIBLINGS_COUNT_PAGE) < lastPage &&
               <Text color="gray.300" width={8} textAlign="center">...</Text>}
-            <PaginationItem number={lastPage} />
+            <PaginationItem onPageChange={onPageChange} number={lastPage} />
           </>
         )}
 
