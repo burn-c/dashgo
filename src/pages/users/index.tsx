@@ -14,14 +14,17 @@ import {
   Td,
   Text,
   useBreakpointValue,
-  Spinner
+  Spinner,
+  Link
 } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import Link from 'next/link'
+import NextLink from 'next/link'
 
 import { Sidebar, Pagination, Header } from "../../components";
 
 import { useUsers } from "../services/hooks/useUsers";
+import { queryClient } from "../services/queryClient";
+import { api } from "../services/api";
 
 export default function UserList() {
   const [currentPage, setCurrentpage] = useState(1)
@@ -31,6 +34,16 @@ export default function UserList() {
     base: false,
     lg: true
   })
+
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const response = await api.get(`users/${userId}`)
+
+      return response.data
+    }, {
+      staleTime: 1_000 * 60 * 10 // 10 minutes
+    })
+  }
 
   return (
     <Box>
@@ -46,7 +59,7 @@ export default function UserList() {
                 !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4" />
               }
             </Heading>
-            <Link href="/users/create" passHref >
+            <NextLink href="/users/create" passHref >
               <Button
                 as="a"
                 size="sm"
@@ -56,7 +69,7 @@ export default function UserList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </NextLink>
 
           </Flex>
 
@@ -90,7 +103,9 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Text fontWeight="bold">{name}</Text>
+                            <Link color="purple" onMouseEnter={() => handlePrefetchUser(Number(id))}>
+                              <Text fontWeight="bold">{name}</Text>
+                            </Link>
                             <Text fontWeight="sm" color="gray.300">{email}</Text>
                           </Box>
                         </Td>
